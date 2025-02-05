@@ -1,0 +1,36 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <h1>Edytuj Użytkownika</h1>
+    <form action="/AdminPanel/users/edit/{{uzytkownicy._id}}" method="POST">
+
+      <div class="mb-4">
+        <label for="imie" class="form-label">Imie:</label><br>
+        <input type="text" class="form-control" id="imie" name="imie" value="{{uzytkownicy.imie}}" required/>
+      </div>
+      
+      <div class="mb-4">
+        <label for="nazwisko" class="form-label">Nazwisko:</label><br>
+        <input type="text" class="form-control" id="nazwisko" name="nazwisko"value=" {{uzytkownicy.nazwisko}}"/>
+      </div>
+
+      <div class="mb-4">
+        <label for="email" class="form-label">Email:</label><br>
+        <input type="email" class="form-control" id="email" name="email" value="{{uzytkownicy.email}}" required/>
+      </div>
+      
+      <div class="mb-4">
+        <label for="haslo" class="form-label">Hasło:</label><br>
+        <input type="password" class="form-control" id="haslo" name="haslo"/>
+      </div>
+
+      <div class="mb-4">
+        <label for="admin" class="form-label">Admin:</label>
+        <input type="checkbox" id="admin" name="admin" value="true" {{#if uzytkownicy.admin}}checked{{/if}}>
+      </div>
+
+      <br>
+      <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+      <a href="/AdminPanel/Users" class="btn btn-secondary ms-2">Anuluj</a>
+    </form>
+  </div>
+</div>

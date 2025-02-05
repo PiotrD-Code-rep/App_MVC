@@ -1,0 +1,34 @@
+<div class="container py-5">
+  <h1>Lista produktów</h1>
+  <a class="btn btn-primary mb-2 mt-2" href="/AdminPanel/products/create">Dodaj nowy produkt</a>
+  <div class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>Nazwa produktu</th>
+          <th>Kategoria</th>
+          <th>Cena</th>
+          <th>Stan magazynowy</th>
+          <th>Akcje</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each produkty}}
+        <tr>
+          <td>{{this.nazwa_produktu}}</td>
+          <td>{{this.katygoria.nazwa_katygori}}</td>
+          <td>{{this.cena}}</td>
+          <td>{{this.stan_magazynowy}}</td>
+          <td>
+            <a class="btn btn-warning btn-sm" href="/AdminPanel/products/edit/{{this._id}}">Edytuj</a>
+            <a class="btn btn-danger btn-sm" href="/AdminPanel/products/delete/{{this._id}}" onclick="return confirm('Czy na pewno chcesz usunąć ten produkt?');">Usuń</a>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+

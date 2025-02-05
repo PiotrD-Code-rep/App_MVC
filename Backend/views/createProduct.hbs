@@ -1,0 +1,90 @@
+{{!-- <div class="container py-5">
+  <div class="row justify-content-center">
+      <h1>Dodaj nowy produkt</h1>
+      <form action="/AdminPanel/products/create" method="POST">
+      
+        <div class="mb-4">
+          <label for="nazwa_produktu" class="form-label">Nazwa produktu:</label>
+          <input type="text" class="form-control" name="nazwa_produktu" id="nazwa_produktu" required/>
+        </div>
+
+        <div class="mb-4">
+          <label for="cena" class="form-label">Cena:</label>
+          <input type="number" class="form-control" name="cena" id="cena" step="0.01" required/>
+        </div>
+
+        <div class="mb-4">
+          <label for="opis_produktu" class="form-label">Opis produktu:</label>
+          <textarea class="form-control" name="opis_produktu" id="opis_produktu" rows="3"></textarea>
+        </div>
+
+        <div class="mb-4">
+          <label for="katygoria" class="form-label">katygoria:</label>
+          <select class="form-select" name="katygoria" id="katygoria" required/>
+            {{#each katygoria}}
+              <option value="{{this._id}}">{{this.nazwa_katygori}}</option>
+            {{/each}}
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <label for="stan_magazynowy" class="form-label">Stan magazynowy:</label>
+          <input type="number" class="form-control" name="stan_magazynowy" id="stan_magazynowy"/>
+        </div>
+
+        <div class="mb-4">
+          <button type="submit" class="btn btn-success">Dodaj</button>
+          <a href="/AdminPanel/products" class="btn btn-secondary">Powrót</a>
+        </div>
+    </form>
+  </div>
+</div> --}}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <h1>Dodaj nowy produkt</h1>
+    <!-- Dodajemy enctype="multipart/form-data" -->
+    <form action="/AdminPanel/products/create" method="POST" enctype="multipart/form-data">
+      
+      <div class="mb-4">
+        <label for="nazwa_produktu" class="form-label">Nazwa produktu:</label>
+        <input type="text" class="form-control" name="nazwa_produktu" id="nazwa_produktu" required />
+      </div>
+
+      <div class="mb-4">
+        <label for="cena" class="form-label">Cena:</label>
+        <input type="number" class="form-control" name="cena" id="cena" step="0.01" required />
+      </div>
+
+      <div class="mb-4">
+        <label for="opis_produktu" class="form-label">Opis produktu:</label>
+        <textarea class="form-control" name="opis_produktu" id="opis_produktu" rows="3"></textarea>
+      </div>
+
+      <div class="mb-4">
+        <label for="katygoria" class="form-label">Kategoria:</label>
+        <select class="form-select" name="katygoria" id="katygoria" required>
+          {{#each katygoria}}
+            <option value="{{this._id}}">{{this.nazwa_katygori}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label for="stan_magazynowy" class="form-label">Stan magazynowy:</label>
+        <input type="number" class="form-control" name="stan_magazynowy" id="stan_magazynowy" />
+      </div>
+
+      <!-- Nowe pole do wyboru zdjęć -->
+      <div class="mb-4">
+        <label for="zdjecia_produktu" class="form-label">Zdjęcia produktu:</label>
+        <!-- Atrybut multiple umożliwia wybranie więcej niż jednego pliku -->
+        <input type="file" class="form-control" name="zdjecia_produktu" id="zdjecia_produktu" accept="image/*" multiple>
+      </div>
+
+      <div class="mb-4">
+        <button type="submit" class="btn btn-success">Dodaj</button>
+        <a href="/AdminPanel/products" class="btn btn-secondary">Powrót</a>
+      </div>
+    </form>
+  </div>
+</div>

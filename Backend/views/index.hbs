@@ -1,0 +1,28 @@
+<div class="container mt-4">
+  <div class="row" id="product-row">
+    {{#each produkty}}
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+        <div class="card h-100 text-center m-1">
+          <img 
+            class="card-img-top custom-image" 
+            src="{{#if zdjecia_produktu.length}}{{zdjecia_produktu.[0]}}{{else}}/img/default-image.jpg{{/if}}" 
+            alt="{{nazwa_produktu}}" 
+          />
+          <div class="card-body d-flex flex-column">
+            <h4 class="card-title">{{nazwa_produktu}}</h4>
+            <p class="card-text fs-4">{{cena}} zł</p>
+            <button class="btn btn-dark mt-auto info-btn" type="button" 
+            data-id="{{_id}}" data-name="{{nazwa_produktu}}" data-description="{{opis_produktu}}" data-price="{{cena}}"  data-images="{{#if zdjecia_produktu.length}}{{#each zdjecia_produktu}}{{this}}{{#unless @last}},{{/unless}}{{/each}}{{else}}/img/default-image.jpg{{/if}}">Info</button>
+            <button class="btn btn-dark mt-2" type="button"onclick="addToCart('{{_id}}', '{{nazwa_produktu}}', '{{cena}}')">Dodaj do koszyka</button>
+          </div>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+</div>
+
+
+
+
+
+

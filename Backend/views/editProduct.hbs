@@ -1,0 +1,169 @@
+{{!-- <div class="container py-5">
+  <div class="row justify-content-center">
+    <h1>Edytuj produkt</h1>
+    <form action="/AdminPanel/products/edit/{{produkt._id}}" method="POST">
+
+      <div class="mb-4">
+        <label for="nazwa_produktu" class="form-label">Nazwa produktu:</label><br>
+        <input type="text" class="form-control" id="nazwa_produktu" name="nazwa_produktu" value="{{produkt.nazwa_produktu}}" required/>
+      </div>
+      
+      <div class="mb-4">
+        <label for="opis_produktu" class="form-label">Opis produktu:</label><br>
+        <textarea class="form-control" id="opis_produktu" name="opis_produktu">{{produkt.opis_produktu}}</textarea>
+      </div>
+      
+      <div class="mb-4">
+        <label for="cena" class="form-label">Cena:</label><br>
+        <input type="number" step="0.01" class="form-control" id="cena" name="cena" value="{{produkt.cena}}" required/>
+      </div>
+      
+      <div class="mb-4">
+        <label for="katygoria" class="form-label">Kategoria:</label><br>
+        <select class="form-select" name="katygoria" id="katygoria" required/>
+          {{#each katygoria}}
+            <option value="{{this._id}}" {{#if this.selected}}selected{{/if}}>
+              {{this.nazwa_katygori}}
+            </option>
+          {{/each}}
+        </select>
+      </div>
+      
+      <div class="mb-4">
+        <label for="stan_magazynowy" class="form-label">Stan magazynowy:</label><br>
+        <input type="number" class="form-control" id="stan_magazynowy" name="stan_magazynowy" value="{{produkt.stan_magazynowy}}" required/>
+      </div>
+      
+      <br>
+      <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+      <a href="/AdminPanel/products" class="btn btn-secondary ms-2">Anuluj</a>
+    </form>
+  </div>
+</div> --}}
+
+
+{{!-- <div class="container py-5">
+  <div class="row justify-content-center">
+    <h1>Edytuj produkt</h1>
+    <!-- Dodaj enctype="multipart/form-data" -->
+    <form action="/AdminPanel/products/edit/{{produkt._id}}" method="POST" enctype="multipart/form-data">
+      <div class="mb-4">
+        <label for="nazwa_produktu" class="form-label">Nazwa produktu:</label><br>
+        <input type="text" class="form-control" id="nazwa_produktu" name="nazwa_produktu" value="{{produkt.nazwa_produktu}}" required />
+      </div>
+      
+      <div class="mb-4">
+        <label for="opis_produktu" class="form-label">Opis produktu:</label><br>
+        <textarea class="form-control" id="opis_produktu" name="opis_produktu">{{produkt.opis_produktu}}</textarea>
+      </div>
+      
+      <div class="mb-4">
+        <label for="cena" class="form-label">Cena:</label><br>
+        <input type="number" step="0.01" class="form-control" id="cena" name="cena" value="{{produkt.cena}}" required />
+      </div>
+      
+      <div class="mb-4">
+        <label for="katygoria" class="form-label">Kategoria:</label><br>
+        <select class="form-select" name="katygoria" id="katygoria" required>
+          {{#each katygoria}}
+            <option value="{{this._id}}" {{#if this.selected}}selected{{/if}}>
+              {{this.nazwa_katygori}}
+            </option>
+          {{/each}}
+        </select>
+      </div>
+      
+      <div class="mb-4">
+        <label for="stan_magazynowy" class="form-label">Stan magazynowy:</label><br>
+        <input type="number" class="form-control" id="stan_magazynowy" name="stan_magazynowy" value="{{produkt.stan_magazynowy}}" required />
+      </div>
+      
+      <!-- Pole do przesyłania nowych zdjęć -->
+      <div class="mb-4">
+        <label for="zdjecia_produktu" class="form-label">Nowe zdjęcia produktu:</label>
+        <input type="file" class="form-control" id="zdjecia_produktu" name="zdjecia_produktu" accept="image/*" multiple>
+      </div>
+      
+      <!-- Wyświetlenie aktualnych zdjęć -->
+      {{#if produkt.zdjecia_produktu.length}}
+      <div class="mb-4">
+        <p>Aktualne zdjęcia:</p>
+        {{#each produkt.zdjecia_produktu}}
+          <img src="{{this}}" alt="Zdjęcie produktu" class="img-thumbnail" style="max-width: 150px; margin-right: 10px;">
+        {{/each}}
+      </div>
+      {{/if}}
+      
+      <br>
+      <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+      <a href="/AdminPanel/products" class="btn btn-secondary ms-2">Anuluj</a>
+    </form>
+  </div>
+</div> --}}
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <h1>Edytuj produkt</h1>
+    <!-- Upewnij się, że formularz ma enctype="multipart/form-data" -->
+    <form action="/AdminPanel/products/edit/{{produkt._id}}" method="POST" enctype="multipart/form-data">
+      <div class="mb-4">
+        <label for="nazwa_produktu" class="form-label">Nazwa produktu:</label>
+        <input type="text" class="form-control" id="nazwa_produktu" name="nazwa_produktu" value="{{produkt.nazwa_produktu}}" required />
+      </div>
+      
+      <div class="mb-4">
+        <label for="opis_produktu" class="form-label">Opis produktu:</label>
+        <textarea class="form-control" id="opis_produktu" name="opis_produktu">{{produkt.opis_produktu}}</textarea>
+      </div>
+      
+      <div class="mb-4">
+        <label for="cena" class="form-label">Cena:</label>
+        <input type="number" step="0.01" class="form-control" id="cena" name="cena" value="{{produkt.cena}}" required />
+      </div>
+      
+      <div class="mb-4">
+        <label for="katygoria" class="form-label">Kategoria:</label>
+        <select class="form-select" name="katygoria" id="katygoria" required>
+          {{#each katygoria}}
+            <option value="{{this._id}}" {{#if this.selected}}selected{{/if}}>
+              {{this.nazwa_katygori}}
+            </option>
+          {{/each}}
+        </select>
+      </div>
+      
+      <div class="mb-4">
+        <label for="stan_magazynowy" class="form-label">Stan magazynowy:</label>
+        <input type="number" class="form-control" id="stan_magazynowy" name="stan_magazynowy" value="{{produkt.stan_magazynowy}}" required />
+      </div>
+      
+      <!-- Pole do przesyłania nowych zdjęć -->
+      <div class="mb-4">
+        <label for="zdjecia_produktu" class="form-label">Dodaj nowe zdjęcia produktu:</label>
+        <input type="file" class="form-control" id="zdjecia_produktu" name="zdjecia_produktu" accept="image/*" multiple>
+      </div>
+      
+      <!-- Wyświetlenie aktualnych zdjęć z możliwością usunięcia -->
+      {{#if produkt.zdjecia_produktu.length}}
+      <div class="mb-4">
+        <p>Aktualne zdjęcia:</p>
+        <div class="d-flex flex-wrap">
+          {{#each produkt.zdjecia_produktu}}
+            <div class="me-3 mb-3 text-center">
+              <img src="{{this}}" alt="Zdjęcie produktu" class="img-thumbnail" style="max-width: 150px;">
+              <div>
+                <label>
+                  <input type="checkbox" name="removeImages[]" value="{{this}}"> Usuń
+                </label>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+      </div>
+      {{/if}}
+      
+      <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+      <a href="/AdminPanel/products" class="btn btn-secondary ms-2">Anuluj</a>
+    </form>
+  </div>
+</div>

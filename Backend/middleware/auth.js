@@ -2,7 +2,28 @@ const dotenv = require('dotenv');
 dotenv.config();
 const jwt = require('jsonwebtoken');
 
-// Middleware do weryfikacji tokena z CIASTECZKA
+function setUser(req, res, next) {
+  const token = req.cookies.token;
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+      req.user = decoded;
+    } catch (err) {
+      console.error('Błąd weryfikacji tokena:', err);
+      res.clearCookie('token');
+    }
+  }
+  next();
+};
+
+function forceToLogin(req, res, next) {
+  if (req.user) {
+    return next();
+  } else {
+    return res.redirect('/login?next=' + encodeURIComponent(req.originalUrl));
+  }
+}
+
 function verifyToken(req, res, next) {
   
   // Odczytujemy token z ciasteczka (np. 'token')
@@ -19,45 +40,17 @@ function verifyToken(req, res, next) {
   } catch (err) {
     return res.status(403).send('Invalid token');
   }
-}
+};
 
-// Middleware sprawdzający, czy użytkownik jest adminem
 function isAdmin(req, res, next) {
   if (!req.user || !req.user.admin) {
     return res.status(403).send('Access denied. Admins only.');
   }
   next();
-}
+};
 
-module.exports = { verifyToken, isAdmin };
+module.exports = { verifyToken, isAdmin ,setUser,forceToLogin };
 
-// dotenv.config();
-// const jwt = require('jsonwebtoken');
-
-// // Middleware do weryfikacji tokena
-// function verifyToken(req, res, next) {
-//     const token = localStorage.getItem('token'); // Pobranie nagłówka Authorization
-//     if (!token) {
-//         return res.status(401).send('No token provided');
-//     }
-
-//     try {
-//         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET); // Weryfikacja tokena
-//         req.user = decoded; // Przypisanie danych użytkownika z tokena do req.user
-//         next(); // Przejście do kolejnego middleware/obsługi trasy
-//     } catch (err) {
-//         return res.status(403).send('Invalid token');
-//     }
-// }
-
-// function isAdmin(req, res, next) {
-//     if (!req.user || !req.user.admin) {
-//         return res.status(403).send('Access denied. Admins only.');
-//     }
-//     next();
-// }
-
-// module.exports = {verifyToken ,isAdmin} ; 
 
 
 

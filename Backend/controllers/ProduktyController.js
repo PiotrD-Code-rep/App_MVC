@@ -109,7 +109,7 @@ const deleteProductAPI = async (req, res) => {
         if (deletedProdukt){
             return res.status(200).json({ success: true, message: 'Produkt został pomyślnie usunięty.' });
         } else{
-            return res.status(404).json({ success: false, message: 'Nie znaleziono produktu do usunięcia.' });
+            return res.status(404).json({ success: false, message: 'Nie znaleziono produktu do usunięcia.'});
         }
     }catch (err){
         return res.status(500).json({ message: 'Błąd serwera.', error: err.message });
@@ -189,63 +189,11 @@ const showEditFormProduct = async (req, res) => {
   }
 };
 
-// const updateProduct = async (req, res) => {
-//   try {
-//     const productId = req.params.id;
-//     const { nazwa_produktu, opis_produktu, cena, katygoria, stan_magazynowy } = req.body;
-
-//     // Jeśli przesłano kategorię, walidujemy jej istnienie
-//     if (katygoria) {
-//       const katDoc = await Katygorie.findById(katygoria);
-//       if (!katDoc) {
-//         return res.status(400).send('Niepoprawny identyfikator kategorii.');
-//       }
-//     }
-
-//     const updateData = {
-//       nazwa_produktu,
-//       opis_produktu,
-//       cena,
-//       katygoria,
-//       stan_magazynowy
-//     };
-//     // if (req.files && req.files.length > 0) {
-//     //   const newImages = req.files.map(file => '/uploads/' + file.filename);
-//     //   // Łączymy nowo przesłane obrazy z już zapisanymi
-//     //   updateData.zdjecia_produktu = currentProduct.zdjecia_produktu.concat(newImages);
-//     // }
-
-
-
-//     if (req.files && req.files.length > 0) {
-//       updateData.zdjecia_produktu = req.files.map(file => '/uploads/' + file.filename);
-//     }
-//     await Produkty.findByIdAndUpdate(productId, updateData, { new: true, runValidators: true });
-//     res.redirect('/AdminPanel/products');
-//   } catch (err) {
-//     console.error(err);
-//     res.sendStatus(500);
-//   }
-// };
-
-const deleteProduct = async (req, res) => {
-  try {
-    const productId = req.params.id;
-    await Produkty.findByIdAndDelete(productId);
-    res.redirect('/AdminPanel/products');
-  } catch (err) {
-    console.error(err);
-    res.sendStatus(500);
-  }
-};
-
-
 const updateProduct = async (req, res) => {
   try {
     const productId = req.params.id;
     const { nazwa_produktu, opis_produktu, cena, katygoria, stan_magazynowy } = req.body;
     
-    // Walidacja kategorii, jeśli została przesłana
     if (katygoria) {
       const katDoc = await Katygorie.findById(katygoria);
       if (!katDoc) {
@@ -253,7 +201,6 @@ const updateProduct = async (req, res) => {
       }
     }
     
-    // Pobieramy aktualny produkt, aby zachować dotychczasowe zdjęcia
     const currentProduct = await Produkty.findById(productId);
     if (!currentProduct) {
       return res.status(404).send('Nie znaleziono produktu');
@@ -267,12 +214,9 @@ const updateProduct = async (req, res) => {
       stan_magazynowy
     };
     
-    // Pobierz listę zdjęć, które mają pozostać (domyślnie wszystkie)
     let updatedImages = currentProduct.zdjecia_produktu || [];
     
-    // Jeśli przesłano zaznaczenia do usunięcia, usuń wskazane obrazy
     if (req.body.removeImages) {
-      // Upewnij się, że mamy tablicę (gdy zaznaczony jest jeden checkbox, może to być string)
       const removeImages = Array.isArray(req.body.removeImages)
         ? req.body.removeImages
         : [req.body.removeImages];
@@ -280,7 +224,7 @@ const updateProduct = async (req, res) => {
       updatedImages = updatedImages.filter(image => !removeImages.includes(image));
     }
     
-    // Jeśli przesłano nowe zdjęcia, mapujemy je na względne ścieżki i dołączamy do istniejących
+
     if (req.files && req.files.length > 0) {
       const newImages = req.files.map(file => '/uploads/' + file.filename);
       updatedImages = updatedImages.concat(newImages);
@@ -289,6 +233,17 @@ const updateProduct = async (req, res) => {
     updateData.zdjecia_produktu = updatedImages;
     
     await Produkty.findByIdAndUpdate(productId, updateData, { new: true, runValidators: true });
+    res.redirect('/AdminPanel/products');
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+};
+
+const deleteProduct = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    await Produkty.findByIdAndDelete(productId);
     res.redirect('/AdminPanel/products');
   } catch (err) {
     console.error(err);

@@ -1,0 +1,47 @@
+###
+# PRZYKŁAD: Tworzenie nowego zamówienia
+# Pamiętaj zmienić URL na odpowiedni adres Twojej aplikacji (lokalnie: http://localhost:3000)
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzQwY2IzN2M0YTI0NWQwZjA5NzE1ZDAiLCJhZG1pbiI6dHJ1ZSwiaWF0IjoxNzM4ODY0NzMzLCJleHAiOjE3Mzg4NzkxMzN9.MG9M0TjKLQAoCAz-2V62lTG_OsNlT0mRkin22SU71iA
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "uzytkownikId": "6740cb37c4a245d0f09715d0",
+  "adresDostawy": {
+    "ulica": "Warszawska 123",
+    "miasto": "Kraków",
+    "kod": "30-000",
+    "kraj": "Polska"
+  },
+  "koszyk": [
+    {
+      "produktId": "6727b450fb206fc17f091b95",
+      "ilosc": 2,
+      "cena": 23.34
+    },
+    {
+      "produktId": "6727b450fb206fc17f091b97",
+      "ilosc": 2,
+      "cena": 15.99
+    }
+  ],
+  "metodaPlatnosci": "blik"
+}
+####
+DELETE  http://localhost:3000/api/Orders/:id
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "_id": "67a4e8089b46c640f094c997",
+}
+###
+GET http://localhost:3000/api/orders/
+Authorization: Bearer {{token}}
+###
+GET http://localhost:3000/api/orders/67a4edd89abd12aac1366900
+
+###
+GET http://localhost:3000/api/orders/
+###
+GET http://localhost:3000/api/Orders

@@ -1,20 +1,20 @@
 const express = require('express');
 const {
-    getWszystkieZamowieanie_Pozycja,
-    getZamowieanie_PozycjaId,
-    postTworzenieZamowieanie_Pozycja,
-    putAktualizacjaZamowieanie_Pozycja,
-    deleteZamowieanie_Pozycja
+    getAllOrderAPI,
+    getOrderIdAPI,
+    postCreateOrderAPI,
+    putUpdateOrderAPI,
+    deleteOrderAPI
 } = require('../controllers/ZamowieanieController');
 const {verifyToken, isAdmin} = require('../middleware/auth');
 
 const router = express.Router();
 
-// Definiowanie tras
-router.get('/',verifyToken, isAdmin, getWszystkieZamowieanie_Pozycja);               // Pobieranie wszystkich 
-router.get('/:id',verifyToken, isAdmin, getZamowieanie_PozycjaId);                    // Pobieranie  po ID
-router.post('/',verifyToken, isAdmin, postTworzenieZamowieanie_Pozycja);               // Tworzenie nowego 
-router.put('/:id',verifyToken, isAdmin, putAktualizacjaZamowieanie_Pozycja);             // Aktualizacja 
-router.delete('/:id',verifyToken, isAdmin, deleteZamowieanie_Pozycja);                      // Usuwanie 
+// api/Orders
+router.get('/Orders',verifyToken, isAdmin, getAllOrderAPI);               // Pobieranie wszystkich 
+router.get('/Orders/:id',verifyToken, isAdmin, getOrderIdAPI);                    // Pobieranie  po ID
+router.post('/Orders',verifyToken, isAdmin, postCreateOrderAPI);               // Tworzenie nowego 
+router.put('/Orders/:id',verifyToken, isAdmin,putUpdateOrderAPI);             // Aktualizacja 
+router.delete('/Orders/:id',verifyToken, isAdmin, deleteOrderAPI);                      // Usuwanie 
 
 module.exports = router;

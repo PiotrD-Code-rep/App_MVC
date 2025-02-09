@@ -1,0 +1,46 @@
+<div class="container">
+    <h1>Lista zamówien</h1>
+    <a class="btn btn-primary mb-2 mt-2" href="/AdminPanel/orders/create">Dodaj nowy produkt</a>
+    {{#if zamowienie.length}}
+      {{#each zamowienie}}
+        <div class="order card mb-3">
+          <div class="card-header">
+            <h2>Zamówienie: {{_id}}</h2>
+          </div>
+          <div class="card-body">
+            <p><strong>Użytkownik:</strong> {{uzytkownik}}</p>
+            <p><strong>Status zamówienia:</strong> {{status_zamowienia}}</p>
+            <p><strong>Status płatności:</strong> {{status_platnosci}}</p>
+            <p><strong>Kwota całkowita:</strong> {{kwota_calkowita}} zł</p>
+            <p><strong>Data utworzenia:</strong> {{data_utworzenia}}</p>
+
+            <h3>Pozycje zamówienia:</h3>
+            {{#if pozycje.length}}
+              <ul class="list-group mb-3">
+                {{#each pozycje}}
+                  <li class="list-group-item">
+                    <p><strong>Produkt:</strong> {{produkt}}</p>
+                    <p><strong>Ilość:</strong> {{ilosc}}</p>
+                    <p><strong>Cena:</strong> {{cena}} zł</p>
+                  </li>
+                {{/each}}
+              </ul>
+            {{else}}
+              <p>Brak pozycji w zamówieniu.</p>
+            {{/if}}
+
+            <h3>Adres dostawy:</h3>
+            <p>
+              {{adres_dostawy.ulica}}<br>
+              {{adres_dostawy.miasto}}, {{adres_dostawy.kod_pocztowy}}<br>
+              {{adres_dostawy.kraj}}
+            </p>
+          </div>
+           <a class="btn btn-warning btn-sm mb-1" href="/AdminPanel/orders/edit/{{this._id}}">Edytuj</a>
+            <a class="btn btn-danger btn-sm mb-1" href="/AdminPanel/orders/delete/{{this._id}}" onclick="return confirm('Czy na pewno chcesz usunąć tego użytkownika?');">Usuń</a>
+        </div>
+      {{/each}}
+    {{else}}
+      <p>Brak zamówień do wyświetlenia.</p>
+    {{/if}}
+  </div>

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const PozycjaZamowieniaModel = new mongoose.Schema({
   produkt: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Produkt',
+    ref: 'Produkty',
     required: true
   },
   ilosc: {
@@ -14,12 +14,12 @@ const PozycjaZamowieniaModel = new mongoose.Schema({
     type: Number,
     required: true
   }
-}, { _id: false });
+},{_id: false});
 
 const zamowienieModel = new mongoose.Schema({
   uzytkownik: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Uzytkownik',
+    ref: 'Uzytkownicy',
     required: true
   },
   pozycje: [PozycjaZamowieniaModel],
@@ -47,12 +47,7 @@ const zamowienieModel = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-}, {
-  collection: 'Zamowienia'
-});
-
-
-
+}, {collection: 'Zamowienie'});
 
 
 module.exports = mongoose.model('Zamowienie',  zamowienieModel);

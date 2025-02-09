@@ -1,16 +1,24 @@
 const Produkty = require('../models/ProduktyModel');
 
 
-const getStronaGlowna = async (req, res) => {
+const getMainPage = async (req, res) => {
   try {
     const produkty = await Produkty.find().lean();
     res.render('index',{produkty});
   } catch (error) {
     console.error(error);
-    res.status(500).send('Wystąpił błąd podczas ładowania strony głównej.');
+    res.status(500).send('Wystąpił błąd podczas ładowania strony głównej');
   }
 };
 
+const getAdminPage = async (req, res) => {
+  try {
+    res.render('adminpanel');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Wystąpił błąd podczas panelu administracyjnego');
+  }
+};
 
-module.exports = { getStronaGlowna};
+module.exports = { getMainPage, getAdminPage };
 

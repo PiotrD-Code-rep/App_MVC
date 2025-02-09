@@ -2,7 +2,6 @@ const Uzytkownicy= require("../models/UzytkownicyModel");
 const bcrypt= require('bcryptjs');
 const {sendAccessToken, createAccessToken} = require('../helpers/token');
 
-
 //api/users
 const getAllUserAPI = async(req,res)=>{
     try{
@@ -200,50 +199,81 @@ const deleteUser = async (req, res) => {
   }
 };
 
+//login
+const getLogin = (req, res) => {
+  const { error } = req.query;      
+  res.render('login', { error });   
+};
 
-// Logowanie użytkownika
-const postLogowanie = async (req, res) => {
-    try{
-        const { email, haslo } = req.body;
-        // Sprawdzenie, czy email i hasło są dostarczone
-        if (!email || !haslo){
-            return res.status(400).json({ error: 'Email i hasło są wymagane.' });
-        }
-
-        const user = await Uzytkownicy.findOne({ email });
-
-        if (!user){
-            return res.status(401).json({ error: 'Nieprawidłowy email lub hasło.' });
-        }
-
-        const passwordMatch = await bcrypt.compare(haslo, user.haslo);
-        if (!passwordMatch){
-            return res.status(401).json({ error: 'Nieprawidłowy email lub hasło.' });
-        }
-
-        const token = createAccessToken(user._id, user.admin);
-        sendAccessToken(res,token);
-
-    }catch (error){
-        res.status(500).json({ error: 'Błąd podczas logowania.' });
+const postLogin = async (req, res) => {
+  try {
+    const { email, haslo } = req.body;
+    if (!email || !haslo) {
+      return res.redirect('/login?error=Uzupełnij email i hasło');
     }
+
+    const user = await Uzytkownicy.findOne({ email });
+    if (!user) {
+      return res.redirect('/login?error=Nieprawidłowe dane logowania');
+    }
+
+    const passwordMatch = await bcrypt.compare(haslo, user.haslo);
+    if (!passwordMatch) {
+      return res.redirect('/login?error=Nieprawidłowe dane logowania');
+    }
+
+    const token = createAccessToken(user._id, user.admin);
+    sendAccessToken(res, token,'/');
+
+  } catch (error) {
+    console.error(error);
+    return res.redirect('/login?error=Wystąpił błąd serwera');
+  }
 };
 
-// Rejestracja użytkownika
-const postRejestracja = postCreateUserAPI;
-
-//Zmian ikony
-const postWhoami = async (req, res) => {
-    return res.json({
-        email: req.user.email,
-        // np. role: req.user.role
-      });
+//register
+const getRegister = (req, res) => {
+  const { error } = req.query; 
+  res.render('register', { error });
 };
 
-//Wylogowanie
-const postLogout = async (req, res) => {
-    res.clearCookie('token');
-    return res.json({ message: 'Wylogowano' });
+const postRegister = async (req, res) => {
+  try {
+    const { imie, nazwisko, email, haslo, confirmHaslo } = req.body;
+    if (!imie || !nazwisko || !email || !haslo || !confirmHaslo) {
+      return res.redirect('/register?error=Uzupełnij wszystkie pola');
+    }
+    if (haslo !== confirmHaslo) {
+      return res.redirect('/register?error=Hasła muszą się zgadzać');
+    }
+
+    const existingUser = await Uzytkownicy.findOne({ email });
+    if (existingUser) {
+      return res.redirect('/register?error=Email jest już używany');
+    }
+
+    const hashed = await bcrypt.hash(haslo, 10);
+    const newUser = new Uzytkownicy({
+      imie,
+      nazwisko,
+      email,
+      haslo: hashed
+    });
+    await newUser.save();
+
+    const token = createAccessToken(newUser._id, newUser.admin);
+    sendAccessToken(res, token,'/');
+
+  } catch (error) {
+    console.error(error);
+    return res.redirect('/register?error=Błąd serwera przy rejestracji');
+  }
+};
+
+//logout
+const getLogout = (req, res) => {
+  res.clearCookie('token');
+  res.redirect('/');
 };
 
 module.exports={
@@ -258,8 +288,9 @@ module.exports={
     showEditFormUser,
     updateUser,
     deleteUser,
-    postLogowanie,
-    postRejestracja,
-    postWhoami,
-    postLogout
+    getLogin,
+    postLogin,
+    getRegister,
+    postRegister,
+    getLogout
 };

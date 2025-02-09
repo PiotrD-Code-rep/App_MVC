@@ -1,0 +1,24 @@
+ <div class="container mt-5">
+    <h1>Edytuj Zamówienie - ID: {{zamowienie._id}}</h1>
+    <form action="/AdminPanel/Orders/update/{{zamowienie._id}}" method="POST">
+      <div class="mb-3">
+        <label for="status_zamowienia" class="form-label">Status zamówienia</label>
+        <select name="status_zamowienia" id="status_zamowienia" class="form-select">
+          <option value="nowe" {{#if (eq zamowienie.status_zamowienia "nowe")}}selected{{/if}}>Nowe</option>
+          <option value="w realizacji" {{#if (eq zamowienie.status_zamowienia "w realizacji")}}selected{{/if}}>W realizacji</option>
+          <option value="wyslane" {{#if (eq zamowienie.status_zamowienia "wyslane")}}selected{{/if}}>Wysłane</option>
+          <option value="dostarczone" {{#if (eq zamowienie.status_zamowienia "dostarczone")}}selected{{/if}}>Dostarczone</option>
+          <option value="anulowane" {{#if (eq zamowienie.status_zamowienia "anulowane")}}selected{{/if}}>Anulowane</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="status_platnosci" class="form-label">Status płatności</label>
+        <select name="status_platnosci" id="status_platnosci" class="form-select">
+          <option value="niezaplacone" {{#if (eq zamowienie.status_platnosci "niezaplacone")}}selected{{/if}}>Niezapłacone</option>
+          <option value="zaplacone" {{#if (eq zamowienie.status_platnosci "zaplacone")}}selected{{/if}}>Zapłacone</option>
+          <option value="zwrot" {{#if (eq zamowienie.status_platnosci "zwrot")}}selected{{/if}}>Zwrot</option>
+        </select>
+      </div>
+      <!-- Możesz dodać dodatkowe pola do edycji, np. adres dostawy czy pozycje zamówienia -->
+      <button type="submit" class="btn btn-primary">Zaktualizuj zamówienie</button>
+    </form>

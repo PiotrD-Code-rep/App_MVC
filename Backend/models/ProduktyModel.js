@@ -31,6 +31,6 @@ const produktyModel= new mongoose.Schema({
     type:Date,
     default:Date.now,
   },
-  },{ collection: 'Produkty' });
+  },{collection: 'Produkty'});
 
 module.exports =mongoose.model("Produkty",produktyModel);

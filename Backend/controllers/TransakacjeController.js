@@ -1,113 +1,150 @@
 const Transakcje = require("../models/TransakcjeModel");
-const Uzytkownicy = require("../models/UzytkownicyModel");
 
-const getWszystkieTransakcje = async(req,res)=>{
-    try{
-        const transakcje = await Transakcje.find();
-        if (transakcje){
-            return res.status(200).json(transakcje);
-        } else{
-            return res.status(404).json({ success: false, message: 'Nie znaleziono żadnych transakcji.' });
-        }
-    }catch (err){
-        return res.status(500).json({ message: 'Błąd serwera.', error: err.message });
+const getAllTransactionAPI = async (req, res) => {
+    try {
+      const transakcje = await Transakcje.find().populate('zamowienie');
+      
+      if (transakcje.length === 0) {
+        return res.status(404).json({ message: 'Brak transakcji w bazie.' });
+      }
+      return res.status(200).json(transakcje);
+    } catch (err) {
+      return res.status(500).json({ message: 'Błąd serwera.', error: err.message });
     }
 };
-
-const getTransakcjeId = async (req, res) => {
-    try{
-        const transakcja = await Transakcje.findById(req.params.id);
-
-        if (transakcja){
-            return res.status(200).json(transakcja);
-        } else{
-            return res.status(404).json({ success: false, message: 'Nie znaleziono transakcji o podanym ID.' });
-        }
-    }catch (err){
-        return res.status(500).json({ message: 'Błąd serwera.', error: err.message });
+  
+const getTransactionIdAPI = async (req, res) => {
+    try {
+     const transakcje = await Transakcje.find().populate('zamowienie');
+      if (transakcje) {
+        return res.status(200).json(transakcje);
+      }
+      return res.status(404).json({ message: 'Nie znaleziono transakcji o podanym ID.' });
+    } catch (err) {
+      return res.status(500).json({ message: 'Błąd serwera.', error: err.message });
     }
 };
+  
 
-const postTworzenieTransakcje = async (req, res) => {
-    try{
-        const { typ_transakcji, uzytkownik, kwota } = req.body;
-
-        // Sprawdzenie wymaganych pól
-        if (!typ_transakcji || !uzytkownik || kwota === undefined){
-            return res.status(400).json({ message: 'Pola "typ_transakcji", "uzytkownik" i "kwota" są wymagane.' });
-        }
-
-        // Walidacja użytkownika
-        const uzytkownikDoc = await Uzytkownicy.findById(uzytkownik);
-        if (!uzytkownikDoc){
-            return res.status(400).json({ message: 'Niepoprawny identyfikator użytkownika.' });
-        }
-
-        const transakcja = new Transakcje({
-            typ_transakcji,
-            uzytkownik,
-            kwota,
+const putUpdateTransactionAPI = async (req, res) => {
+    try {
+      // Przykład: zmiana statusu (z 'oczekujaca' na 'zrealizowana' albo 'odrzucona')
+      const { status_platnosci } = req.body;
+      const validStatuses = ['oczekujaca', 'zrealizowana', 'odrzucona'];
+      if (!validStatuses.includes(status_platnosci)) {
+        return res.status(400).json({
+          message: `Nieprawidłowy status płatności. Dostępne wartości: ${validStatuses.join(', ')}`
         });
-
-        const savedTransakcja = await transakcja.save();
-        if (savedTransakcja){
-            return res.status(201).json(savedTransakcja);
-        } else{
-            return res.status(400).json({ success: false, message: 'Nie udało się dodać transakcji.' });
-        }
-    }catch (err){
-        return res.status(500).json({ message: 'Błąd serwera.', error: err.message });
+      }
+  
+      const updatedTransakcje = await Transakcje.findByIdAndUpdate(
+        req.params.id,
+        { status_platnosci },
+        { new: true }
+      );
+      if (!updatedTransakcje) {
+        return res.status(404).json({ message: 'Nie znaleziono transakcji o podanym ID.' });
+      }
+  
+      return res.status(200).json(updatedTransakcje);
+    } catch (err) {
+      return res.status(500).json({ message: 'Błąd serwera.', error: err.message });
+    }
+};
+  
+const deleteTransactionAPI = async (req, res) => {
+    try {
+      const transakcje = await Transakcje.findByIdAndDelete(req.params.id);
+      if (!transakcje) {
+        return res.status(404).json({ message: 'Nie znaleziono transakcji o podanym ID.' });
+      }
+      return res.status(200).json({ message: 'Transakcja została usunięta.' });
+    } catch (err) {
+      return res.status(500).json({ message: 'Błąd serwera.', error: err.message });
     }
 };
 
-const putAktualizacjaTransakcje = async (req, res) => {
-    try{
-        const { typ_transakcji, uzytkownik, kwota } = req.body;
-
-        // Walidacja użytkownika
-        if (!uzytkownik){
-            return res.status(400).json({ message: 'Pole "uzytkownik" jest wymagane.' });
-        }
-
-        const uzytkownikDoc = await Uzytkownicy.findById(uzytkownik);
-        if (!uzytkownikDoc){
-            return res.status(400).json({ message: 'Niepoprawny identyfikator użytkownika.' });
-        }
-
-        // Aktualizacja Transakcji
-        const updatedTransakcja = await Transakcje.findByIdAndUpdate(
-            req.params.id,
-            { typ_transakcji, uzytkownik, kwota },
-            { new: true, runValidators: true }
-        );
-
-        if (updatedTransakcja){
-            return res.status(200).json(updatedTransakcja);
-        } else {
-            return res.status(404).json({ success: false, message: 'Nie znaleziono transakcji do aktualizacji.' });
-        }
-    }catch (err){
-        return res.status(500).json({ message: 'Błąd serwera.', error: err.message });
-    }
+//AdminPanel/Transactions
+const listTransaction = async (req, res) => {
+  try {
+    const zamowienie= await Zamowienie.find().lean();
+    res.render('listOrder', {zamowienie});
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
 };
 
-const deleteTransakcje = async (req, res) => {
-    try{
-        const deletedTransakcja = await Transakcje.findByIdAndDelete(req.params.id);
-        if (deletedTransakcja){
-            return res.status(200).json({ success: true, message: 'Transakcja została pomyślnie usunięta.' });
-        } else{
-            return res.status(404).json({ success: false, message: 'Nie znaleziono transakcji do usunięcia.' });
-        }
-    }catch (err){
-        return res.status(500).json({ message: 'Błąd serwera.', error: err.message });
-    }
+const showCreateFormTransaction = async (req, res) => {
+  try {
+    const zamowienie= await Zamowienie.find().lean();
+    res.render('createOrder', {zamowienie});
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
 };
+
+const createTransaction = async (req, res) => {
+
+};
+
+const showEditFormTransaction = async (req, res) => {
+  try {
+    const zamowienie = await Zamowienie.findById(req.params.id).lean();
+    if (!zamowienie) {
+      return res.status(404).send('Nie znaleziono produktu');
+    }
+
+    res.render('editOrder', {zamowienie});
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+};
+
+const updateTransaction = async (req, res) => {
+  try {
+    const zamowienieId = req.params.id;
+    const { status_zamowienia } = req.body;
+
+    const validStatuses = ['nowe', 'w realizacji', 'wyslane', 'dostarczone', 'anulowane'];
+    if (!validStatuses.includes(status_zamowienia)) {
+      return res.status(400).json({
+        message: `Nieprawidłowa wartość statusu. Dozwolone wartości: ${validStatuses.join(', ')}`
+      });
+    }
+
+    await Zamowienie.findByIdAndUpdate(zamowienieId, { status_zamowienia });
+    res.redirect('/AdminPanel/Orders');
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+};
+
+const deleteTransaction = async (req, res) => {
+  try {
+    const zamowienieId = req.params.id;
+    await Zamowienie.findByIdAndDelete(zamowienieId );
+    res.redirect('/AdminPanel/Orders');
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+};
+
 
 module.exports={
-    getWszystkieTransakcje,
-    getTransakcjeId,
-    postTworzenieTransakcje,
-    putAktualizacjaTransakcje,
-    deleteTransakcje
+    getAllTransactionAPI,
+    getTransactionIdAPI,
+    //  
+    putUpdateTransactionAPI,
+    deleteTransactionAPI,
+    listTransaction,
+    showCreateFormTransaction,
+    createTransaction,
+    showEditFormTransaction,
+    updateTransaction,
+    deleteTransaction
 };

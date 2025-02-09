@@ -10,6 +10,7 @@ const app = express();
 const cookieParser = require('cookie-parser');
 // const {verifyToken ,isAdmin } = require('./middleware/auth')
 const expressHandlebars = require("express-handlebars");
+const {setUser} = require('./Backend/middleware/auth');
 
 //Middleware
 app.use(express.json()); //Zamiast bodyparser w Express 5 (Zalecany)
@@ -38,6 +39,12 @@ app.set("views", path.join(__dirname, "./Backend/views")); // Ustawienie folderu
 app.set("view engine", "hbs"); // Ustawienie Handlebars jako domyślnego silnika widoków
 
 
+//Middleware do przekazywania danych o użytkowniku
+app.use(setUser);
+app.use((req, res, next) => {
+  res.locals.user = req.user || null;
+  next();
+});
 
 
 //Tarasy API
@@ -59,7 +66,7 @@ app.use('/',HomeTasa);
 const OrdersTasa=require('./Backend/routes/OrdersRoutes');
 app.use('/Orders',OrdersTasa);
 const AdminTasa=require('./Backend/routes/AdminPanelRoutes');
-app.use('/AdminPanel',AdminTasa);
+app.use('/',AdminTasa);
 
 
 //Schemat bazy danych

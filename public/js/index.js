@@ -1,50 +1,3 @@
-//  // Po załadowaniu drzewa DOM
-//  document.addEventListener('DOMContentLoaded', function() {
-//     // Wyszukaj wszystkie przyciski z klasą .info-btn
-//     const infoButtons = document.querySelectorAll('.info-btn');
-//     infoButtons.forEach((btn) => {
-//       btn.addEventListener('click', (event) => {
-//         event.preventDefault(); // Zabezpieczenie przed ewentualnym przeładowaniem
-
-//         // Zbuduj obiekt "product" z atrybutów data-...
-//         const product = {
-//           _id: btn.dataset.id,
-//           nazwa_produktu: btn.dataset.name,
-//           opis_produktu: btn.dataset.description,
-//           cena: btn.dataset.price,
-//           zdjecia_produktu: [ btn.dataset.image ] // zakładam, że interesuje Cię pierwsze zdjęcie
-//         };
-
-//         // Wywołanie funkcji, która wypełni i otworzy modal
-//         openWindowProduct(product);
-//       });
-//     });
-//   });
-
-//   // Funkcja pokazująca modal
-//   function openWindowProduct(product) {
-//     document.getElementById('ProductName').innerText = product.nazwa_produktu;
-//     document.getElementById('ProductDescription').innerText = product.opis_produktu;
-//     document.getElementById('ProductPrice').innerText = `Cena: ${product.cena} zł`;
-
-//     // Jeśli brak zdjęć, możesz dać warunek lub placeholder
-//     const imageUrl = product.zdjecia_produktu[0] 
-//       ? product.zdjecia_produktu[0] 
-//       : '/img/default-image.jpg';
-
-//     document.getElementById('ProductImage').innerHTML = `
-//       <img
-//         src="${imageUrl}"
-//         class="img-fluid"
-//         alt="${product.nazwa_produktu}"
-//         style="max-height: 300px;"
-//       />
-//     `;
-
-//     // Inicjalizacja i otwarcie modala za pomocą Bootstrap 5
-//     const productModal = new bootstrap.Modal(document.getElementById('productModal'));
-//     productModal.show();
-//   }
 // Po załadowaniu drzewa DOM
 document.addEventListener('DOMContentLoaded', function() {
   // Wyszukaj wszystkie przyciski z klasą .info-btn
@@ -158,8 +111,7 @@ function addToCart(_id, nazwa_produktu, cena) {
   saveCart(cart);
   console.log('Produkt dodany do koszyka:', cart);
 
-  // (Opcjonalnie) Możesz tu od razu otworzyć modal koszyka:
-  // openCartModal(); 
+
 }
 
 // Usuwanie z koszyka
@@ -259,12 +211,6 @@ function renderCart() {
   }
 }
 
-// (Opcjonalnie) Funkcja otwierająca modal koszyka (jeżeli chcesz to robić z JS, a nie data-bs-toggle w HTML)
-function openCartModal() {
-  renderCart();
-  const koszykModal = new bootstrap.Modal(document.getElementById('koszykModal'));
-  koszykModal.show();
-}
 
 // Obsługa przycisku "Wyczyść koszyk"
 document.addEventListener('DOMContentLoaded', () => {
@@ -280,136 +226,201 @@ document.addEventListener('DOMContentLoaded', () => {
 /**************************************************************
  * Inicjalizacja obsługi rejestracji
  **************************************************************/
-function initRegister() {
-  // Znajdujemy formularz #registerForm
-  const registerForm = document.getElementById('registerForm');
-  if (!registerForm) return;
+// function initRegister() {
+//   // Znajdujemy formularz #registerForm
+//   const registerForm = document.getElementById('registerForm');
+//   if (!registerForm) return;
 
-  registerForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+//   registerForm.addEventListener('submit', async (e) => {
+//     e.preventDefault();
 
-    // Pobranie wartości z formularza
-    const imie = document.getElementById('registerFirstname').value.trim();
-    const nazwisko = document.getElementById('registerLastname').value.trim();
-    const email = document.getElementById('registerEmail').value.trim();
-    const haslo = document.getElementById('registerPassword').value;
-    const confirmhaslo = document.getElementById('registerConfirmPassword').value;
+//     // Pobranie wartości z formularza
+//     const imie = document.getElementById('registerFirstname').value.trim();
+//     const nazwisko = document.getElementById('registerLastname').value.trim();
+//     const email = document.getElementById('registerEmail').value.trim();
+//     const haslo = document.getElementById('registerPassword').value;
+//     const confirmhaslo = document.getElementById('registerConfirmPassword').value;
 
 
-    // Walidacja podstawowa
-    if (haslo !== confirmhaslo) {
-      alert('Hasła nie są identyczne!');
-      return;
-    }
+//     // Walidacja podstawowa
+//     if (haslo !== confirmhaslo) {
+//       alert('Hasła nie są identyczne!');
+//       return;
+//     }
 
-    if (!imie || !nazwisko || !email || !haslo) {
-      alert('Uzupełnij pola: imię, nazwisko, email i hasło!');
-      return;
-    }
+//     if (!imie || !nazwisko || !email || !haslo) {
+//       alert('Uzupełnij pola: imię, nazwisko, email i hasło!');
+//       return;
+//     }
 
-    // Dane do rejestracji
-    const registrationData = {
-      imie,
-      nazwisko,
-      email,
-      haslo,
-    };
+//     // Dane do rejestracji
+//     const registrationData = {
+//       imie,
+//       nazwisko,
+//       email,
+//       haslo,
+//     };
 
-    try {
-      // Wysyłanie danych do serwera (API)
-      const response = await fetch('http://localhost:3000/rejestracja', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(registrationData),
-      });
+//     try {
+//       // Wysyłanie danych do serwera (API)
+//       const response = await fetch('http://localhost:3000/rejestracja', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify(registrationData),
+//       });
 
-      // Obsługa ewentualnego błędu
-      if (!response.ok) {
-        // Możesz spróbować pobrać treść błędu i wyświetlić
-        throw new Error('Rejestracja nieudana!');
-      }
+//       // Obsługa ewentualnego błędu
+//       if (!response.ok) {
+//         // Możesz spróbować pobrać treść błędu i wyświetlić
+//         throw new Error('Rejestracja nieudana!');
+//       }
 
-      // Odczyt odpowiedzi
-      const data = await response.json();
-      console.log('Rejestracja OK:', data);
-      alert('Rejestracja przebiegła pomyślnie! Teraz możesz się zalogować.');
+//       // Odczyt odpowiedzi
+//       const data = await response.json();
+//       console.log('Rejestracja OK:', data);
+//       alert('Rejestracja przebiegła pomyślnie! Teraz możesz się zalogować.');
 
-      // Zamknij modal rejestracji
-      const registerModal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
-      registerModal.hide();
+//       // Zamknij modal rejestracji
+//       const registerModal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+//       registerModal.hide();
 
-      // (Opcjonalnie) otwórz modal logowania
-      const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
-      loginModal.show();
+//       // (Opcjonalnie) otwórz modal logowania
+//       const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+//       loginModal.show();
 
-    } catch (error) {
-      console.error('Błąd rejestracji:', error);
-      alert('Wystąpił błąd podczas rejestracji. Spróbuj ponownie.');
-    }
-  });
-}
+//     } catch (error) {
+//       console.error('Błąd rejestracji:', error);
+//       alert('Wystąpił błąd podczas rejestracji. Spróbuj ponownie.');
+//     }
+//   });
+// }
 
-/**************************************************************
- * Inicjalizacja obsługi logowania
- **************************************************************/
-function initLogin() {
-  // Znajdujemy formularz #loginForm
-  const loginForm = document.getElementById('loginForm');
-  if (!loginForm) return;
+// /**************************************************************
+//  * Inicjalizacja obsługi logowania
+//  **************************************************************/
+// function initLogin() {
+//   // Znajdujemy formularz #loginForm
+//   const loginForm = document.getElementById('loginForm');
+//   if (!loginForm) return;
 
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+//   loginForm.addEventListener('submit', async (e) => {
+//     e.preventDefault();
 
-    // Pobranie wartości z formularza
-    const email = document.getElementById('loginEmail').value.trim();
-    const haslo = document.getElementById('loginPassword').value;
+//     // Pobranie wartości z formularza
+//     const email = document.getElementById('loginEmail').value.trim();
+//     const haslo = document.getElementById('loginPassword').value;
 
-    // Walidacja
-    if (!email || !haslo) {
-      alert('Podaj email i hasło!');
-      return;
-    }
+//     // Walidacja
+//     if (!email || !haslo) {
+//       alert('Podaj email i hasło!');
+//       return;
+//     }
 
-    // Dane do logowania
-    const loginData = {
-      email,
-      haslo,
-    };
+//     // Dane do logowania
+//     const loginData = {
+//       email,
+//       haslo,
+//     };
 
-    try {
-      // Wyślij żądanie POST do API
-      const response = await fetch('http://localhost:3000/logowanie', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include', // w razie użycia sesji/cookie
-        body: JSON.stringify(loginData),
-      });
+//     try {
+//       // Wyślij żądanie POST do API
+//       const response = await fetch('http://localhost:3000/logowanie', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         credentials: 'include', // w razie użycia sesji/cookie
+//         body: JSON.stringify(loginData),
+//       });
 
-      if (!response.ok) {
-        throw new Error('Logowanie nieudane!');
-      }
+//       if (!response.ok) {
+//         throw new Error('Logowanie nieudane!');
+//       }
 
-      const data = await response.json();
-      console.log('Logowanie OK:', data);
+//       const data = await response.json();
+//       console.log('Logowanie OK:', data);
 
-      alert('Zalogowano pomyślnie!');
+//       alert('Zalogowano pomyślnie!');
 
-      // Zamknij modal logowania
-      const loginModal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
-      loginModal.hide();
+//       // Zamknij modal logowania
+//       const loginModal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
+//       loginModal.hide();
 
-      // (Opcjonalnie) przekierowanie gdzieś
-      // window.location.href = '/';
+//       // (Opcjonalnie) przekierowanie gdzieś
+//       // window.location.href = '/';
 
-    } catch (error) {
-      console.error('Błąd logowania:', error);
-      alert('Nieprawidłowe dane lub błąd serwera.');
-    }
-  });
-}
+//     } catch (error) {
+//       console.error('Błąd logowania:', error);
+//       alert('Nieprawidłowe dane lub błąd serwera.');
+//     }
+//   });
+// }
 
-document.addEventListener('DOMContentLoaded', () => {
-  initRegister();
-  initLogin();
-});
+// async function initAuth() {
+//   // Spróbuj pobrać info o aktualnym użytkowniku
+//   try {
+//     const res = await fetch('/whoami', {
+//       method: 'GET',
+//       credentials: 'include'  // żeby cookies JWT były wysyłane
+//     });
+//     if (res.ok) {
+//       const data = await res.json();
+//       // mamy np. data = { userId, name, email }
+//       showUserMenu(data);
+//     } else {
+//       // 401 lub inny => niezalogowany
+//       showLoginIcon();
+//     }
+//   } catch (err) {
+//     console.error('Błąd whoami:', err);
+//     showLoginIcon();
+//   }
+// }
+
+// function showUserMenu(userData) {
+//   // Pokaż #userMenu, ustaw np. userNameLabel
+//   document.getElementById('loginIcon').style.display = 'none';
+//   const userMenu = document.getElementById('userMenu');
+//   userMenu.style.display = 'inline-block';
+
+//   const userNameLabel = document.getElementById('userNameLabel');
+//   userNameLabel.innerText = userData.name || 'Użytkownik';
+// }
+
+// function showLoginIcon() {
+//   // Pokaż #loginIcon
+//   document.getElementById('userMenu').style.display = 'none';
+//   document.getElementById('loginIcon').style.display = 'inline-block';
+// }
+
+// function initLogoutLink() {
+//   const logoutLink = document.getElementById('logoutLink');
+//   if (!logoutLink) return;
+
+//   logoutLink.addEventListener('click', async (e) => {
+//     e.preventDefault();
+//     try {
+//       const res = await fetch('/logout', {
+//         method: 'GET', 
+//         credentials: 'include'
+//       });
+//       // serwer -> res.clearCookie('jwt') i 200 OK
+//       if (!res.ok) {
+//         console.error('Wylogowanie nieudane:', res.status);
+//         return;
+//       }
+
+//       // Sukces, odśwież ikony
+//       showLoginIcon();
+//     } catch (err) {
+//       console.error('Wylogowanie error:', err);
+//     }
+//   });
+// }
+
+
+// document.addEventListener('DOMContentLoaded', () => {
+//   initRegister();
+//   initLogin();
+//   initAuth();
+//   initLogoutLink();
+// });
 

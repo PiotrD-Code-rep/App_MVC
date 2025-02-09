@@ -10,7 +10,7 @@ const createAccessToken = (_id,admin)=> {
   
 
 // Funkcja do wysyłania tokena w ciasteczku
-const sendAccessToken = (res, token) => {
+const sendAccessToken = (res, token,redirectUrl) => {
   // Ustawiamy ciasteczko 'token'
   res.cookie('token', token, {
     httpOnly: true,       // ciasteczko niewidoczne w JS (zwiększa bezpieczeństwo przed XSS)
@@ -19,8 +19,8 @@ const sendAccessToken = (res, token) => {
     maxAge: 14400000,   
     path: '/',       // 1 godzina w milisekundach
   });
-  
+  return res.redirect(redirectUrl);
   // Odpowiadamy klientowi np. komunikatem o sukcesie
-  res.status(200).json({ message: 'Zalogowano pomyślnie' });
+  // res.status(200).json({ message: 'Zalogowano pomyślnie' });
 };
 module.exports={createAccessToken,sendAccessToken};

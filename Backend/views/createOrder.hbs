@@ -4,19 +4,42 @@
     
     <hr>
     <h2>Dane do realizacji zamówienia</h2>
-    <form id="order-form" action="/submit-order" method="POST">
+    <form id="order-form" action="/AdminPanel/Orders/create" method="POST">
       <div class="mb-3">
         <label for="address" class="form-label">Adres Dostawy</label><br>
         <label for="address" class="form-label">Ulica:</label>
-        <input type="text" class="form-control" id="ulica" name="ulica" required>
+        <input type="text" class="form-control" id="ulica" name="ulica">
         <label for="address" class="form-label">Miasto:</label>
-        <input type="text" class="form-control" id="miasto" name="miasto" required>
+        <input type="text" class="form-control" id="miasto" name="miasto">
         <label for="address" class="form-label">Kod pocztowy:</label>
-        <input type="text" class="form-control" id="kod_pocztowy" name="kod_pocztowy" required>
+        <input type="text" class="form-control" id="kod_pocztowy" name="kod_pocztowy">
         <label for="address" class="form-label">Kraj:</label>
-        <input type="text" class="form-control" id="kraj" name="kraj" required>
+        <input type="text" class="form-control" id="kraj" name="kraj">
       </div>
-
+      <div class="mb-3">
+        <label for="paymentMethod" class="form-label">Metoda płatności</label>
+        <select name="paymentMethod" id="paymentMethod" class="form-select">
+          <option value="gotowka">Gotówka</option>
+          <option value="karta">Karta</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="status_zamowienia" class="form-label">Status zamówienia</label>
+        <select name="status_zamowienia" id="status_zamowienia" class="form-select">
+          <option value="nowe">Nowe</option>
+          <option value="w realizacji">W realizacji</option>
+          <option value="wyslane">Wysłane</option>
+          <option value="dostarczone">Dostarczone</option>
+          <option value="anulowane">Anulowane</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="status_platnosci" class="form-label">Status płatności</label>
+        <select name="status_platnosci" id="status_platnosci" class="form-select">
+          <option value="niezaplacone">Niezapłacone</option>
+          <option value="zaplacone">Zapłacone</option>
+        </select>
+      </div>
       <input type="hidden" name="cart" id="cart-data">
       <button type="submit" class="btn btn-primary">Złóż zamówienie</button>
     </form>
